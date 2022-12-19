@@ -4,6 +4,10 @@
 # transposing row becomes column
 # by default end="/n" in print statement
 # empty print() bring us down to the next line
+# lines to bet on:
+# bet = 1: top line
+# bet = 2: top two lines
+# bet = 3: top three lines
 
 
 import random
@@ -20,8 +24,33 @@ symbol_count = {
     "A": 2,
     "B": 4,
     "C": 6,
-    "C": 8
+    "D": 8
 }
+
+symbol_value = {
+    "A": 5,
+    "B": 4,
+    "C": 3,
+    "D": 2
+}
+
+# columns = slot machine
+
+
+def check_winnings(columns, lines, bet, values):
+    winnings = 0
+    winning_lines = []
+    for line in range(lines):  # only look through the lines the user bet on
+        symbol = columns[0][line]
+        for column in columns:
+            symbol_to_check = column[line]
+            if symbol != symbol_to_check:
+                break
+        else:
+            winnings = values[symbol] * bet
+            winning_lines.append(line + 1)
+
+    return winnings, winning_lines
 
 
 def get_slot_machine_spin(rows, cols, symbols):
@@ -120,6 +149,9 @@ def main():
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
     print_slot_machine(slots)
+    winnings, winning_lines = check_winnings(slots, lines, bet, symbol_value)
+    print(f"You won ${winnings}.")
+    print(f"You won on:", *winning_lines)
 
 
 main()
